@@ -122,7 +122,12 @@
             customPredictor: function (date) {
               // highlights every day of a month which is a multiple of 4
               if (date.getDate() % 4 === 0) {
-                return true
+                return 'highlight-4'
+              }
+
+              // highlights every day of a month which is a multiple of 3
+              if (date.getDate() % 3 === 0) {
+                return 'highlight-3'
               }
             }
           }
@@ -278,7 +283,11 @@ export default {
       highlightedFn: {
         customPredictor (date) {
           if (date.getDate() % 4 === 0) {
-            return true
+            return 'highlight-4'
+          }
+
+          if (date.getDate() % 3 === 0) {
+            return 'highlight-3'
           }
         }
       },
@@ -416,5 +425,13 @@ h5 {
 .form-group label {
     font-size: 80%;
     display: block;
+}
+
+.highlight-4 {
+  background-color: red!important;
+}
+
+.highlight-3 {
+  background-color: blue!important;
 }
 </style>

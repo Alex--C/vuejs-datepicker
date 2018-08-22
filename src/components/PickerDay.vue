@@ -22,7 +22,8 @@
           :key="day.timestamp"
           :class="dayClasses(day)"
           v-html="dayCellContent(day)"
-          @click="selectDate(day)"></span>
+          @click="selectDate(day)"
+          @hover="hoverDate(day)"></span>
     </div>
   </div>
 </template>
@@ -101,6 +102,8 @@ export default {
           isSelected: this.isSelectedDate(dObj),
           isDisabled: this.isDisabledDate(dObj),
           isHighlighted: this.isHighlightedDate(dObj),
+          hasCustomHighlightClass: this.hasCustomHighlightClass(dObj),
+          customHighlightClass: this.customHighlightClass(dObj),
           isHighlightStart: this.isHighlightStart(dObj),
           isHighlightEnd: this.isHighlightEnd(dObj),
           isToday: this.utils.compareDates(dObj, new Date()),
@@ -161,6 +164,13 @@ export default {
         return false
       }
       this.$emit('selectDate', date)
+    },
+    hoverDate (date) {
+      if (date.isDisabled) {
+        this.$emit('hoverDisabled', date)
+        return false
+      }
+      this.$emit('hoverDate', date)
     },
     /**
      * @return {Number}
@@ -321,8 +331,36 @@ export default {
 
       return highlighted
     },
+    /**
+     * Whether a day has a custom highlight class
+     * (only if it is not disabled already except when highlighted.includeDisabled is true)
+     * @param {Date}
+     * @return {Boolean}
+     */
+    hasCustomHighlightClass (date) {
+      if (!(this.isHighlightedDate(date))) {
+        return false
+      }
+
+      if (typeof this.highlighted.customPredictor === 'function' && typeof this.highlighted.customPredictor(date) === 'string') {
+        return true
+      }
+    },
+
+    /**
+     * Custom highlight class of a day
+     * @param {Date}
+     * @return {String}
+     */
+    customHighlightClass (date) {
+      if (!(this.hasCustomHighlightClass(date))) {
+        return ''
+      }
+      return this.highlighted.customPredictor(date)
+    },
+
     dayClasses (day) {
-      return {
+      let classes = {
         'selected': day.isSelected,
         'disabled': day.isDisabled,
         'highlighted': day.isHighlighted,
@@ -333,6 +371,12 @@ export default {
         'highlight-start': day.isHighlightStart,
         'highlight-end': day.isHighlightEnd
       }
+
+      if (day.hasCustomHighlightClass) {
+        classes[day.customHighlightClass] = true
+      }
+
+      return classes
     },
     /**
      * Whether a day is highlighted and it is the first date
