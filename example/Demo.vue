@@ -200,7 +200,14 @@
       <h3>Inline datepicker</h3>
       <datepicker :inline="true"></datepicker>
       <code>
-          &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+    <div class="example">
+      <h3>Multiple Inline datepicker</h3>
+      <datepicker :inline="true" :multiple="3"></datepicker>
+      <code>
+        &lt;datepicker :inline="true" :multiple="3"&gt;&lt;/datepicker&gt;
       </code>
     </div>
     <div class="example">

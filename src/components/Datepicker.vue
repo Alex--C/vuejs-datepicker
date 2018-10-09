@@ -1,96 +1,107 @@
 <template>
-  <div class="vdp-datepicker" :class="[wrapperClass, isRtl ? 'rtl' : '']">
-    <date-input
-      :selectedDate="selectedDate"
-      :resetTypedDate="resetTypedDate"
-      :format="format"
-      :translation="translation"
-      :inline="inline"
-      :id="id"
-      :name="name"
-      :refName="refName"
-      :openDate="openDate"
-      :placeholder="placeholder"
-      :inputClass="inputClass"
-      :typeable="typeable"
-      :clearButton="clearButton"
-      :clearButtonIcon="clearButtonIcon"
-      :calendarButton="calendarButton"
-      :calendarButtonIcon="calendarButtonIcon"
-      :calendarButtonIconContent="calendarButtonIconContent"
-      :disabled="disabled"
-      :required="required"
-      :bootstrapStyling="bootstrapStyling"
-      :use-utc="useUtc"
-      @showCalendar="showCalendar"
-      @closeCalendar="close"
-      @typedDate="setTypedDate"
-      @clearDate="clearDate">
-      <slot name="afterDateInput" slot="afterDateInput"></slot>
-    </date-input>
+  <div class="vdp-datepicker-wrapper" :class="[wrapperClass, isRtl ? 'rtl' : '']">
+    <div class="vdp-datepicker">
+      <date-input
+        :selectedDate="selectedDate"
+        :resetTypedDate="resetTypedDate"
+        :format="format"
+        :translation="translation"
+        :inline="inline"
+        :id="id"
+        :name="name"
+        :refName="refName"
+        :openDate="openDate"
+        :placeholder="placeholder"
+        :inputClass="inputClass"
+        :typeable="typeable"
+        :clearButton="clearButton"
+        :clearButtonIcon="clearButtonIcon"
+        :calendarButton="calendarButton"
+        :calendarButtonIcon="calendarButtonIcon"
+        :calendarButtonIconContent="calendarButtonIconContent"
+        :disabled="disabled"
+        :required="required"
+        :bootstrapStyling="bootstrapStyling"
+        :use-utc="useUtc"
+        @showCalendar="showCalendar"
+        @closeCalendar="close"
+        @typedDate="setTypedDate"
+        @clearDate="clearDate">
+        <slot name="afterDateInput" slot="afterDateInput"></slot>
+      </date-input>
 
 
-    <!-- Day View -->
-    <picker-day
-      v-if="allowedToShowView('day')"
-      :pageDate="pageDate"
-      :selectedDate="selectedDate"
-      :showDayView="showDayView"
-      :fullMonthName="fullMonthName"
-      :allowedToShowView="allowedToShowView"
-      :disabledDates="disabledDates"
-      :highlighted="highlighted"
-      :calendarClass="calendarClass"
-      :calendarStyle="calendarStyle"
-      :translation="translation"
-      :pageTimestamp="pageTimestamp"
-      :isRtl="isRtl"
-      :mondayFirst="mondayFirst"
-      :dayCellContent="dayCellContent"
-      :use-utc="useUtc"
-      @changedMonth="handleChangedMonthFromDayPicker"
-      @selectDate="selectDate"
-      @showMonthCalendar="showMonthCalendar"
-      @selectedDisabled="selectDisabledDate">
-      <slot name="beforeCalendarHeader" slot="beforeCalendarHeader"></slot>
-    </picker-day>
+      <!-- Day View -->
+      <div class="datepicker-multi-container"><div v-for="index in multiple" :key="index" class="datepicker-multi">
+          <picker-day
+            :controlPosition="controlPosition"
+            :showHeader="showHeader"
+            v-if="allowedToShowView('day')"
+            :pageDate="pageDate[index-1]"
+            :selectedDate="selectedDate"
+            :showDayView="showDayView"
+            :fullMonthName="fullMonthName"
+            :allowedToShowView="allowedToShowView"
+            :disabledDates="disabledDates"
+            :highlighted="highlighted"
+            :calendarClass="calendarClass"
+            :calendarStyle="calendarStyle"
+            :translation="translation"
+            :pageTimestamp="pageTimestamp"
+            :isRtl="isRtl"
+            :mondayFirst="mondayFirst"
+            :dayCellContent="dayCellContent"
+            :use-utc="useUtc"
+            :isFirst="index === 1"
+            :isLast="index === multiple"
+            :multiple="multiple"
+            @changedMonth="handleChangedMonthFromDayPicker"
+            @selectDate="selectDate"
+            @showMonthCalendar="showMonthCalendar"
+            @selectedDisabled="selectDisabledDate">
+            <slot name="beforeCalendarHeader" slot="beforeCalendarHeader"></slot>
+          </picker-day>
+        </div></div>
 
-    <!-- Month View -->
-    <picker-month
-      v-if="allowedToShowView('month')"
-      :pageDate="pageDate"
-      :selectedDate="selectedDate"
-      :showMonthView="showMonthView"
-      :allowedToShowView="allowedToShowView"
-      :disabledDates="disabledDates"
-      :calendarClass="calendarClass"
-      :calendarStyle="calendarStyle"
-      :translation="translation"
-      :isRtl="isRtl"
-      :use-utc="useUtc"
-      @selectMonth="selectMonth"
-      @showYearCalendar="showYearCalendar"
-      @changedYear="setPageDate">
-      <slot name="beforeCalendarHeader" slot="beforeCalendarHeader"></slot>
-    </picker-month>
+      <!-- Month View -->
+      <picker-month
+        :controlPosition="controlPosition"
+        v-if="allowedToShowView('month')"
+        :pageDate="pageDate[0]"
+        :selectedDate="selectedDate"
+        :showMonthView="showMonthView"
+        :allowedToShowView="allowedToShowView"
+        :disabledDates="disabledDates"
+        :calendarClass="calendarClass"
+        :calendarStyle="calendarStyle"
+        :translation="translation"
+        :isRtl="isRtl"
+        :use-utc="useUtc"
+        @selectMonth="selectMonth"
+        @showYearCalendar="showYearCalendar"
+        @changedYear="setPageDate">
+        <slot name="beforeCalendarHeader" slot="beforeCalendarHeader"></slot>
+      </picker-month>
 
-    <!-- Year View -->
-    <picker-year
-      v-if="allowedToShowView('year')"
-      :pageDate="pageDate"
-      :selectedDate="selectedDate"
-      :showYearView="showYearView"
-      :allowedToShowView="allowedToShowView"
-      :disabledDates="disabledDates"
-      :calendarClass="calendarClass"
-      :calendarStyle="calendarStyle"
-      :translation="translation"
-      :isRtl="isRtl"
-      :use-utc="useUtc"
-      @selectYear="selectYear"
-      @changedDecade="setPageDate">
-      <slot name="beforeCalendarHeader" slot="beforeCalendarHeader"></slot>
-    </picker-year>
+      <!-- Year View -->
+      <picker-year
+        :controlPosition="controlPosition"
+        v-if="allowedToShowView('year')"
+        :pageDate="pageDate[0]"
+        :selectedDate="selectedDate"
+        :showYearView="showYearView"
+        :allowedToShowView="allowedToShowView"
+        :disabledDates="disabledDates"
+        :calendarClass="calendarClass"
+        :calendarStyle="calendarStyle"
+        :translation="translation"
+        :isRtl="isRtl"
+        :use-utc="useUtc"
+        @selectYear="selectYear"
+        @changedDecade="setPageDate">
+        <slot name="beforeCalendarHeader" slot="beforeCalendarHeader"></slot>
+      </picker-year>
+    </div>
   </div>
 </template>
 <script>
@@ -157,6 +168,14 @@ export default {
     maximumView: {
       type: String,
       default: 'year'
+    },
+    multiple: {
+      type: Number,
+      default: 1
+    },
+    controlPosition: {
+      type: String,
+      default: 'top'
     }
   },
   data () {
@@ -187,7 +206,7 @@ export default {
        */
       calendarHeight: 0,
       resetTypedDate: new Date(),
-      utils: constructedDateUtils
+      utils: constructedDateUtils,
     }
   },
   watch: {
@@ -210,7 +229,18 @@ export default {
       return this.initialView
     },
     pageDate () {
-      return new Date(this.pageTimestamp)
+      let result = []
+      let baseDate = new Date(this.pageTimestamp)
+
+      let d = new Date(baseDate.valueOf())
+      result.push(d)
+
+      for (let i = 1; i < this.multiple; i++) {
+        baseDate.setMonth(baseDate.getMonth() + 1)
+        let d = new Date(baseDate.valueOf())
+        result.push(d)
+      }
+      return result
     },
 
     translation () {
@@ -332,11 +362,15 @@ export default {
     /**
      * Set the selected date
      * @param {Number} timestamp
+     * @param {Boolean} updatePageDate
      */
-    setDate (timestamp) {
+    setDate (timestamp, updatePageDate = true) {
       const date = new Date(timestamp)
       this.selectedDate = date
-      this.setPageDate(date)
+
+      if (updatePageDate) {
+        this.setPageDate(date)
+      }
       this.$emit('selected', date)
       this.$emit('input', date)
     },
@@ -354,7 +388,7 @@ export default {
      * @param {Object} date
      */
     selectDate (date) {
-      this.setDate(date.timestamp)
+      this.setDate(date.timestamp, false)
       if (!this.isInline) {
         this.close(true)
       }

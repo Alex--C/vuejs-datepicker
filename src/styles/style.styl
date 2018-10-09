@@ -1,10 +1,21 @@
 .rtl
     direction rtl
+
+    .vdp-datepicker__calendar
+        right: 0;
 .vdp-datepicker
     position relative
     text-align left
     *
         box-sizing border-box
+
+    .datepicker-multi {
+        display inline-block
+    }
+
+    .datepicker-multi-container {
+        display flex
+    }
 
 .vdp-datepicker__calendar
     position absolute
@@ -12,6 +23,8 @@
     background white
     width 300px
     border 1px solid #ccc
+    height 100%
+
     header
         display block
         line-height 40px

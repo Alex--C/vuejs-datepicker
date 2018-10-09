@@ -5,13 +5,14 @@
       <span
         @click="isRtl ? nextMonth() : previousMonth()"
         class="prev"
-        :class="{'disabled': isLeftNavDisabled}">&lt;</span>
+        :class="{'disabled': isLeftNavDisabled, 'invisible': isFirst !== true}">&lt;</span>
       <span class="day__month_btn" @click="showMonthCalendar" :class="allowedToShowView('month') ? 'up' : ''">{{ isYmd ? currYearName : currMonthName }} {{ isYmd ? currMonthName : currYearName }}</span>
       <span
         @click="isRtl ? previousMonth() : nextMonth()"
         class="next"
-        :class="{'disabled': isRightNavDisabled}">&gt;</span>
+        :class="{'disabled': isRightNavDisabled, 'invisible': isLast !== true}">&gt;</span>
     </header>
+
     <div :class="isRtl ? 'flex-rtl' : ''">
       <span class="cell day-header" v-for="d in daysOfWeek" :key="d.timestamp">{{ d }}</span>
       <template v-if="blankDays > 0">
@@ -48,7 +49,11 @@ export default {
     translation: Object,
     isRtl: Boolean,
     mondayFirst: Boolean,
-    useUtc: Boolean
+    useUtc: Boolean,
+    isFirst: Boolean,
+    isLast: Boolean,
+    controlPosition: String,
+    multiple: Number
   },
   data () {
     const constructedDateUtils = makeDateUtils(this.useUtc)
@@ -218,7 +223,7 @@ export default {
      */
     nextMonth () {
       if (!this.isNextMonthDisabled()) {
-        this.changeMonth(+1)
+        this.changeMonth(1 - (this.multiple - 1))
       }
     },
     /**
