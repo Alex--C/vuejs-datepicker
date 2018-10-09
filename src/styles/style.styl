@@ -25,7 +25,10 @@
     border 1px solid #ccc
     height 100%
 
-    header
+    &.control-bottom
+        padding-bottom: 40px;
+
+    header, footer
         display block
         line-height 40px
         span
@@ -67,6 +70,12 @@
             cursor pointer
             &:hover
                 background #eee
+
+
+    footer
+        position absolute
+        bottom 0
+        width 100%
 
     .disabled
         color #ddd

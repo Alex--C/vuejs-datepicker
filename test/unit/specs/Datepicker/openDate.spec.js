@@ -7,14 +7,15 @@ describe('Datepicker with open date', () => {
   beforeEach(() => {
     wrapper = shallow(Datepicker, {
       propsData: {
-        openDate: openDate
+        openDate: openDate,
+        multiple: 1
       }
     })
   })
 
   it('should be set to October', () => {
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
-    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
+    expect(wrapper.vm.pageDate[0].getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate[0].getFullYear()).toEqual(2016)
   })
 
   it('should set pageTimestamp to be first day of open date\'s month', () => {
@@ -29,14 +30,14 @@ describe('Datepicker with open date', () => {
   it('should open with selected date if one is set', () => {
     const newDate = new Date(2018, 10, 9)
     wrapper.vm.selectDate({timestamp: newDate.getTime()})
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(10)
-    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2018)
+    expect(wrapper.vm.pageDate[0].getMonth()).toEqual(10)
+    expect(wrapper.vm.pageDate[0].getFullYear()).toEqual(2018)
   })
 
   it('should show today\'s date if no open date is set', () => {
     wrapper = shallow(Datepicker)
     const today = new Date()
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+    expect(wrapper.vm.pageDate[0].getMonth()).toEqual(today.getMonth())
+    expect(wrapper.vm.pageDate[0].getFullYear()).toEqual(today.getFullYear())
   })
 })

@@ -55,6 +55,7 @@
             :isFirst="index === 1"
             :isLast="index === multiple"
             :multiple="multiple"
+            :class="'control-' + controlPosition"
             @changedMonth="handleChangedMonthFromDayPicker"
             @selectDate="selectDate"
             @showMonthCalendar="showMonthCalendar"
@@ -206,7 +207,7 @@ export default {
        */
       calendarHeight: 0,
       resetTypedDate: new Date(),
-      utils: constructedDateUtils,
+      utils: constructedDateUtils
     }
   },
   watch: {
@@ -249,7 +250,7 @@ export default {
 
     calendarStyle () {
       return {
-        position: this.isInline ? 'static' : undefined
+        position: this.isInline ? 'relative' : undefined
       }
     },
     isOpen () {
@@ -364,13 +365,23 @@ export default {
      * @param {Number} timestamp
      * @param {Boolean} updatePageDate
      */
-    setDate (timestamp, updatePageDate = true) {
+    setDate (timestamp) {
       const date = new Date(timestamp)
       this.selectedDate = date
 
-      if (updatePageDate) {
+      let selectedYear = this.selectedDate.getFullYear()
+      let selectedMonth = selectedYear * 12 + this.selectedDate.getMonth()
+
+      let pageYearStart = this.pageDate[0].getFullYear()
+      let pageMonthStart = pageYearStart * 12 + this.pageDate[0].getMonth()
+
+      let pageYearEnd = this.pageDate[this.multiple - 1].getFullYear()
+      let pageMonthEnd = pageYearEnd * 12 + this.pageDate[this.multiple - 1].getMonth()
+
+      if (pageMonthStart > selectedMonth || pageMonthEnd < selectedMonth) {
         this.setPageDate(date)
       }
+
       this.$emit('selected', date)
       this.$emit('input', date)
     },
@@ -388,7 +399,7 @@ export default {
      * @param {Object} date
      */
     selectDate (date) {
-      this.setDate(date.timestamp, false)
+      this.setDate(date.timestamp)
       if (!this.isInline) {
         this.close(true)
       }

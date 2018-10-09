@@ -5,12 +5,12 @@
       <span
         @click="isRtl ? nextMonth() : previousMonth()"
         class="prev"
-        :class="{'disabled': isLeftNavDisabled, 'invisible': isFirst !== true}">&lt;</span>
+        :class="{'disabled': isLeftNavDisabled, 'invisible': isFirst !== true || controlPosition !== 'top'}">&lt;</span>
       <span class="day__month_btn" @click="showMonthCalendar" :class="allowedToShowView('month') ? 'up' : ''">{{ isYmd ? currYearName : currMonthName }} {{ isYmd ? currMonthName : currYearName }}</span>
       <span
         @click="isRtl ? previousMonth() : nextMonth()"
         class="next"
-        :class="{'disabled': isRightNavDisabled, 'invisible': isLast !== true}">&gt;</span>
+        :class="{'disabled': isRightNavDisabled, 'invisible': isLast !== true || controlPosition !== 'top'}">&gt;</span>
     </header>
 
     <div :class="isRtl ? 'flex-rtl' : ''">
@@ -26,6 +26,17 @@
           @click="selectDate(day)"
           @hover="hoverDate(day)"></span>
     </div>
+    <footer>
+      <span
+        @click="isRtl ? nextMonth() : previousMonth()"
+        class="prev"
+        :class="{'disabled': isLeftNavDisabled, 'invisible': isFirst !== true || controlPosition !== 'bottom'}">&lt;</span>
+      <span class="day__month_btn">&nbsp;</span>
+      <span
+        @click="isRtl ? previousMonth() : nextMonth()"
+        class="next"
+        :class="{'disabled': isRightNavDisabled, 'invisible': isLast !== true || controlPosition !== 'bottom'}">&gt;</span>
+    </footer>
   </div>
 </template>
 <script>

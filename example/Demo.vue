@@ -211,6 +211,13 @@
       </code>
     </div>
     <div class="example">
+      <h3>Multiple Inline datepicker with bottom controls</h3>
+      <datepicker :inline="true" :multiple="3" controlPosition="bottom"></datepicker>
+      <code>
+        &lt;datepicker :inline="true" :multiple="3" :controlPosition="bottom"&gt;</datepicker&gt;
+      </code>
+    </div>
+    <div class="example">
       <h3>RTL datepicker</h3>
       <datepicker :language="languages.he"></datepicker>
       <code>
