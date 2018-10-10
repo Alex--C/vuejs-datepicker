@@ -129,6 +129,8 @@ Inline always open version
 | open-date                     | Date\|String    |             | If set, open on that date                |
 | minimum-view                  | String          | 'day'       | If set, lower-level views won't show     |
 | maximum-view                  | String          | 'year'      | If set, higher-level views won't show    |
+| multiple                      | Number          | 1           | To show multiple months in DayView       |
+| controlPosition               | String          | 'top'       | To specify next/prev button position     |
 
 
 ## Events
@@ -227,7 +229,7 @@ var state = {
 Dates can be highlighted (e.g. for marking an appointment) in a number of ways. Important:
 By default disabled dates are ignored, to highlight disabled dates set the `includeDisabled`
 property to `true`. Note: Both `to` and `from` properties are required to define a range of
-dates to highlight.
+dates to highlight. The customPredictor can return a string defining the highlight class.
 
 ``` html
 <script>
@@ -249,7 +251,7 @@ var state = {
     customPredictor: function(date) {
       // highlights the date if it is a multiple of 4
       if(date.getDate() % 4 == 0){
-        return true
+        return 'booked'
       }
     },
     includeDisabled: true // Highlight disabled dates
